@@ -19,6 +19,7 @@ namespace EventTickets.API.Tests.Controllers
         {
             _eventRepoMock = new Mock<IEventRepository>();
             _controller = new EventsController(_eventRepoMock.Object);
+
         }
 
         private Event CreateEvent(int id)
