@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
+    <File Path="ReadMe.md" />
   </Folder>
   <Project Path="EventTickets.API.Tests/EventTickets.API.Tests.csproj" Id="79d2f924-de01-4bed-b0fe-c98fe35189d1" />
   <Project Path="EventTickets.API/EventTickets.API.csproj" />
