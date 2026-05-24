@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="EventTickets.API.Tests/EventTickets.API.Tests.csproj" Id="79d2f924-de01-4bed-b0fe-c98fe35189d1" />
+  <Project Path="EventTickets.API/EventTickets.API.csproj" />
+  <Project Path="EventTickets.Application.Tests/EventTickets.Application.Tests.csproj" Id="1f5058df-fb01-419a-8b70-447fc5f67afb" />
+  <Project Path="EventTickets.Application/EventTickets.Application.csproj" />
+  <Project Path="EventTickets.Data.Tests/EventTickets.Data.Tests.csproj" Id="557f630b-ae1c-4dc2-9983-6fbd9b85e037" />
+  <Project Path="EventTickets.Data/EventTickets.Data.csproj" />
+  <Project Path="EventTickets.Domain/EventTickets.Domain.csproj" />
+  <Project Path="EventTickets.Middleware/EventTickets.Middleware.csproj" />
+</Solution>
