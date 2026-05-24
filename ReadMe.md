@@ -111,7 +111,7 @@ Run the API:
 dotnet run --project EventTickets.API
 
 Swagger UI:
-https://localhost:5001/swagger
+http://localhost:5268/swagger/index.html
 
 ## Technologies Used
 - .NET 10
