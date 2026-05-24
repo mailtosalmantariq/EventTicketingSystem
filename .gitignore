@@ -1,0 +1,18 @@
+# Build artifacts
+**/bin/
+**/obj/
+*.dll
+*.exe
+*.pdb
+
+# IDE-specific files
+.vs/
+*.suo
+*.user
+
+# Database and cache files
+*.db-shm
+*.db-wal
+
+# IDE and tooling
+.idea/

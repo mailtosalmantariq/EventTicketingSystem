@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
   <Project Path="EventTickets.API.Tests/EventTickets.API.Tests.csproj" Id="79d2f924-de01-4bed-b0fe-c98fe35189d1" />
   <Project Path="EventTickets.API/EventTickets.API.csproj" />
   <Project Path="EventTickets.Application.Tests/EventTickets.Application.Tests.csproj" Id="1f5058df-fb01-419a-8b70-447fc5f67afb" />
