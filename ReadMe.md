@@ -18,7 +18,8 @@ EventTicketingSystem/
 |-- EventTickets.Domain/       # Entities, enums, domain models
 |-- EventTickets.Data/         # EF Core DbContext, repositories, migrations
 |-- EventTickets.Middleware/   # Global exceptions, extensions
-|-- EventTickets.Tests/        # Unit tests for controllers & repositories
+-- EventTickets.Tests/         # Unit tests for controllers & repositories
+
 
 ## Architecture
 
