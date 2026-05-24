@@ -11,14 +11,15 @@ The EventTicketing API provides functionality for:
 - Ensuring safe updates using EF Core optimistic concurrency
 
 ## Project Structure
+
 EventTicketingSystem/
-|
-|-- EventTickets.API/          # API layer (controllers, requests, responses)
-|-- EventTickets.Application/  # Business logic, interfaces, exceptions
-|-- EventTickets.Domain/       # Entities, enums, domain models
-|-- EventTickets.Data/         # EF Core DbContext, repositories, migrations
-|-- EventTickets.Middleware/   # Global exceptions, extensions
--- EventTickets.Tests/         # Unit tests for controllers & repositories
+├── EventTickets.API/          # API layer (controllers, requests, responses)
+├── EventTickets.Application/  # Business logic, interfaces, exceptions
+├── EventTickets.Domain/       # Entities, enums, domain models
+├── EventTickets.Data/         # EF Core DbContext, repositories, migrations
+├── EventTickets.Middleware/   # Global exceptions, extensions
+├── EventTickets.Tests/         # Unit tests for controllers & repositories
+
 
 
 ## Architecture
