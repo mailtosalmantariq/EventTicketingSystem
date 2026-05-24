@@ -10,9 +10,5 @@
 *.suo
 *.user
 
-# Database and cache files
-*.db-shm
-*.db-wal
-
 # IDE and tooling
 .idea/
