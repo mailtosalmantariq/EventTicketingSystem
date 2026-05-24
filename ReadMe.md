@@ -31,7 +31,7 @@ EventTicketingSystem/
 
 ### Application Layer
 - Repository interfaces
-- Unit of Work
+- Services implementations
 - Exceptions
 - Time provider abstraction
 
