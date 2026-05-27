@@ -1,7 +1,7 @@
 ﻿
 namespace EventTickets.Application.DTOs
 {
-    public class ReserveTicketRequest
+    public class ReserveTicketRequestDto
     {
         public string HolderName { get; set; } = string.Empty;
     }

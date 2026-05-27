@@ -1,5 +1,6 @@
 ﻿using EventTickets.API.Models.Responses;
 using EventTickets.Application.Interfaces.Repos;
+using EventTickets.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,23 +10,20 @@ namespace EventTickets.API.Controllers
     [Route("api/v1/events")]
     public class EventsController : ControllerBase
     {
-        private readonly IEventRepository _eventRepo;
+        private readonly IEventService _eventService;
 
-        public EventsController(IEventRepository eventRepo)
+        public EventsController(IEventService eventService)
         {
-            _eventRepo = eventRepo;
+            _eventService = eventService;
         }
 
         [HttpGet("{eventId}")]
         public async Task<IActionResult> GetEvent(int eventId, CancellationToken cancellationToken)
         {
-            var ev = await _eventRepo.GetEventWithTicketsAsync(eventId, cancellationToken);
-
-            if (ev is null)
-                return NotFound();
-
-            return Ok(EventResponse.FromEntity(ev));
+            var result = await _eventService.GetEventDetailsAsync(eventId, cancellationToken);
+            return Ok(result);
         }
     }
+
 
 }

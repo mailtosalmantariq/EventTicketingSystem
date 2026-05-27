@@ -39,7 +39,7 @@ namespace EventTickets.Tests.Services
             var now = DateTime.UtcNow;
             _clockMock.Setup(c => c.UtcNow).Returns(now);
 
-            var request = new ReserveTicketRequest { HolderName = "John" };
+            var request = new ReserveTicketRequestDto { HolderName = "John" };
 
             var ticket = new Ticket { Id = 10, Status = TicketStatus.Reserved };
 
@@ -61,7 +61,7 @@ namespace EventTickets.Tests.Services
             var now = DateTime.UtcNow;
             _clockMock.Setup(c => c.UtcNow).Returns(now);
 
-            var request = new ReserveTicketRequest { HolderName = "John" };
+            var request = new ReserveTicketRequestDto { HolderName = "John" };
 
             _ticketRepoMock
                 .Setup(r => r.TryReserveAvailableTicketAsync(1, "John", now, It.IsAny<CancellationToken>()))

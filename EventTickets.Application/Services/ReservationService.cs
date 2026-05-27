@@ -23,7 +23,7 @@ namespace EventTickets.Application.Services
             _clock = clock;
         }
 
-        public async Task<int> ReserveTicketAsync(int eventId, ReserveTicketRequest request, CancellationToken cancellationToken)
+        public async Task<int> ReserveTicketAsync(int eventId, ReserveTicketRequestDto request, CancellationToken cancellationToken)
         {
             var now = _clock.UtcNow;
 

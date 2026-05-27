@@ -4,6 +4,6 @@ namespace EventTickets.Application.Interfaces.Services
 {
     public interface IReservationService
     {
-        Task<int> ReserveTicketAsync(int eventId, ReserveTicketRequest request, CancellationToken cancellationToken);
+        Task<int> ReserveTicketAsync(int eventId, ReserveTicketRequestDto request, CancellationToken cancellationToken);
     }
 }

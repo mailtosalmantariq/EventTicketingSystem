@@ -1,9 +1,11 @@
 ﻿using EventTickets.API.Models.Requests;
 using EventTickets.API.Models.Responses;
+using EventTickets.Application.DTOs;
 using EventTickets.Application.Exceptions;
 using EventTickets.Application.Interfaces.Provider;
 using EventTickets.Application.Interfaces.Repos;
 using EventTickets.Application.Interfaces.Repositories;
+using EventTickets.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventTickets.API.Controllers
@@ -12,18 +14,15 @@ namespace EventTickets.API.Controllers
     [Route("api/v1/events/{eventId}/tickets")]
     public class TicketsController : ControllerBase
     {
-        private readonly ITicketRepository _ticketRepo;
-        private readonly IUnitOfWorkRepository _unitOfWork;
-        private readonly ITimeProvider _timeProvider;
+        private readonly IReservationService _reservationService;
+        private readonly IPurchaseService _purchaseService;
 
         public TicketsController(
-            ITicketRepository ticketRepo,
-            IUnitOfWorkRepository unitOfWork,
-            ITimeProvider timeProvider)
+            IReservationService reservationService,
+            IPurchaseService purchaseService)
         {
-            _ticketRepo = ticketRepo;
-            _unitOfWork = unitOfWork;
-            _timeProvider = timeProvider;
+            _reservationService = reservationService;
+            _purchaseService = purchaseService;
         }
 
         [HttpPost("reserve")]
@@ -32,18 +31,19 @@ namespace EventTickets.API.Controllers
             [FromBody] ReserveTicketRequest request,
             CancellationToken cancellationToken)
         {
-            var now = _timeProvider.UtcNow;
 
-            var ticket = await _ticketRepo.TryReserveAvailableTicketAsync(
+            var dto = new ReserveTicketRequestDto
+            {
+                HolderName = request.HolderName
+            };
+
+            var ticketId = await _reservationService.ReserveTicketAsync(
                 eventId,
-                request.HolderName,
-                now,
+                dto,
                 cancellationToken);
 
-            if (ticket is null)
-                throw new ConflictException("No available tickets for this event.");
 
-            return Ok(TicketResponse.FromEntity(ticket));
+            return Ok(new { TicketId = ticketId });
         }
 
         [HttpPost("{ticketId}/purchase")]
@@ -53,24 +53,14 @@ namespace EventTickets.API.Controllers
             [FromBody] PurchaseTicketRequest request,
             CancellationToken cancellationToken)
         {
-            var ticket = await _ticketRepo.GetTicketByIdAsync(ticketId, cancellationToken);
+            await _purchaseService.PurchaseAsync(
+                ticketId,
+                request.HolderName,
+                cancellationToken);
 
-            if (ticket is null || ticket.EventId != eventId)
-                throw new NotFoundException("Ticket not found.");
-
-            if (ticket.Status != Domain.Enums.TicketStatus.Reserved)
-                throw new ConflictException("Ticket is not reserved.");
-
-            if (ticket.HolderName != request.HolderName)
-                throw new ConflictException("Ticket holder name mismatch.");
-
-            // Mark as sold
-            ticket.Status = Domain.Enums.TicketStatus.Sold;
-
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-            return Ok(TicketResponse.FromEntity(ticket));
+            return Ok(new { TicketId = ticketId, Status = "Sold" });
         }
     }
+
 
 }

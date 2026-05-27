@@ -1,7 +1,7 @@
 ﻿using EventTickets.API.Controllers;
-using EventTickets.API.Models.Responses;
-using EventTickets.Application.Interfaces.Repos;
-using EventTickets.Domain.Entities;
+using EventTickets.Application.DTOs;
+using EventTickets.Application.Exceptions;
+using EventTickets.Application.Interfaces.Services;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -11,25 +11,14 @@ namespace EventTickets.API.Tests.Controllers
     [TestFixture]
     public class EventsControllerTests
     {
-        private Mock<IEventRepository> _eventRepoMock;
+        private Mock<IEventService> _eventServiceMock;
         private EventsController _controller;
 
         [SetUp]
         public void SetUp()
         {
-            _eventRepoMock = new Mock<IEventRepository>();
-            _controller = new EventsController(_eventRepoMock.Object);
-
-        }
-
-        private Event CreateEvent(int id)
-        {
-            return new Event
-            {
-                Id = id,
-                Name = "Sample Event",
-                Tickets = new List<Ticket>()
-            };
+            _eventServiceMock = new Mock<IEventService>();
+            _controller = new EventsController(_eventServiceMock.Object);
         }
 
         [Test]
@@ -37,11 +26,19 @@ namespace EventTickets.API.Tests.Controllers
         {
             // Arrange
             var eventId = 10;
-            var entity = CreateEvent(eventId);
 
-            _eventRepoMock
-                .Setup(r => r.GetEventWithTicketsAsync(eventId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(entity);
+            var dto = new EventDetailsDto(
+                id: eventId,
+                name: "Sample Event",
+                startsAt: DateTime.UtcNow,
+                available: 5,
+                reserved: 2,
+                sold: 3
+            );
+
+            _eventServiceMock
+                .Setup(s => s.GetEventDetailsAsync(eventId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(dto);
 
             // Act
             var result = await _controller.GetEvent(eventId, CancellationToken.None);
@@ -49,21 +46,24 @@ namespace EventTickets.API.Tests.Controllers
             // Assert
             result.Should().BeOfType<OkObjectResult>();
             var ok = result as OkObjectResult;
-            ok!.Value.Should().BeEquivalentTo(EventResponse.FromEntity(entity));
+            ok!.Value.Should().BeEquivalentTo(dto);
         }
 
         [Test]
-        public async Task GetEvent_ShouldReturnNotFound_WhenEventDoesNotExist()
+        public async Task GetEvent_ShouldThrowNotFound_WhenServiceThrowsNotFoundException()
         {
+            // Arrange
             var eventId = 10;
 
-            _eventRepoMock
-                .Setup(r => r.GetEventWithTicketsAsync(eventId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Event?)null);
+            _eventServiceMock
+                .Setup(s => s.GetEventDetailsAsync(eventId, It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new NotFoundException("Event not found"));
 
-            var result = await _controller.GetEvent(eventId, CancellationToken.None);
+            // Act
+            Func<Task> act = async () => await _controller.GetEvent(eventId, CancellationToken.None);
 
-            result.Should().BeOfType<NotFoundResult>();
+            // Assert
+            await act.Should().ThrowAsync<NotFoundException>();
         }
     }
 }
